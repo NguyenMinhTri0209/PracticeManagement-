@@ -1,13 +1,17 @@
 package com.PracticeManagement.Manage.service.imp;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.PracticeManagement.Manage.model.Prevent;
 import com.PracticeManagement.Manage.model.Tofprevent;
+import com.PracticeManagement.Manage.service.ReceiptService;
 import com.PracticeManagement.Manage.service.TofpreventService;
 
 @Repository
@@ -15,6 +19,9 @@ public class TofpreventServiceImp implements TofpreventService{
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private ReceiptService receiptService;
 	
 	@Override
 	public int save(Tofprevent tofprevent) {
@@ -42,4 +49,13 @@ public class TofpreventServiceImp implements TofpreventService{
 		return jdbcTemplate.queryForObject("select * from tofprevent where idtofroom=?", new BeanPropertyRowMapper<Tofprevent>(Tofprevent.class), id);
 	}
 	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void updateCostofRoom(Tofprevent tofprevent, String id) throws Exception{
+		jdbcTemplate.update("update tofprevent set cost=? where idtofroom=?", new Object[] {tofprevent.getCost(), id});
+		List<Prevent> list = jdbcTemplate.query("select idpatient from prevent as pr, tofprevent as prdtl where pr.idtofroom = prdtl.idtofroom and pr.idtofroom=?",new BeanPropertyRowMapper<Prevent>(Prevent.class),id);
+		for(int i=0; i<list.size()-1; i++) {
+			long temp = receiptService.checkBill(list.get(i).getIdpatient());
+		}
+	}
 }

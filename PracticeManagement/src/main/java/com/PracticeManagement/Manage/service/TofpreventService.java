@@ -14,4 +14,6 @@ public interface TofpreventService {
 	List<Tofprevent> getAll();
 	
 	Tofprevent getById(String id);
+	
+	void updateCostofRoom(Tofprevent tofprevent, String id) throws Exception;
 }

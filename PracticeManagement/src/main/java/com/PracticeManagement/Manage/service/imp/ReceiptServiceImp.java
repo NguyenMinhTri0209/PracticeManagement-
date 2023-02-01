@@ -3,10 +3,12 @@ package com.PracticeManagement.Manage.service.imp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.PracticeManagement.Manage.model.Prescription;
 import com.PracticeManagement.Manage.model.Receipt;
 import com.PracticeManagement.Manage.model.Tofservice;
 import com.PracticeManagement.Manage.service.ReceiptService;
@@ -64,10 +66,26 @@ public class ReceiptServiceImp implements ReceiptService{
 		//tiền phiếu xét nghiệm
 		long costoftest = jdbcTemplate.queryForObject("select sum(cost) from testdtl as t, toftest as toft where t.idtoftest = toft.idtoftest and idpatient=? group by idpatient",Long.class,id);
 		
+		//tiền phiếu thuốc
+		long costofmedicine;
+		Prescription list;
+		try {
+			list = jdbcTemplate.queryForObject("select * from prescription where idpatient=?", new BeanPropertyRowMapper<Prescription>(Prescription.class), id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			System.out.println(e);
+			list = null;
+		}
+		if(list == null)
+			costofmedicine = 0;
+		else
+			costofmedicine = jdbcTemplate.queryForObject("select sum(cost) from prescription as pr, prescriptiondtl as pre, medicine as m where pr.idprescription = pre.idprescription and pre.idmedicine = m.idmedicine and pr.idpatient=? group by pr.idpatient",Long.class,id);
+		
+		
 		//tổng số tiền
 		long sum = (long)((costofservice + costofprevent + costoftest) * discount);
 		
-		System.out.println(costofservice +" "+ costofprevent + " " + costoftest + " " + discount);
+		System.out.println(costofservice +" "+ costofprevent + " " + costoftest + " " + discount + " " + costofmedicine);
 		
 		return sum;
 	}
