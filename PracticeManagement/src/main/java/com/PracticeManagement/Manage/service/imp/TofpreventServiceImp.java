@@ -51,7 +51,7 @@ public class TofpreventServiceImp implements TofpreventService{
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void updateCostofRoom(Tofprevent tofprevent, String id) throws Exception{
+	public void updateCostofRoom(Tofprevent tofprevent, String id) {
 		jdbcTemplate.update("update tofprevent set cost=? where idtofroom=?", new Object[] {tofprevent.getCost(), id});
 		List<Prevent> list = jdbcTemplate.query("select idpatient from prevent as pr, tofprevent as prdtl where pr.idtofroom = prdtl.idtofroom and pr.idtofroom=?",new BeanPropertyRowMapper<Prevent>(Prevent.class),id);
 		for(int i=0; i<list.size()-1; i++) {

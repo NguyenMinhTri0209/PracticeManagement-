@@ -32,18 +32,8 @@ public class InsertDBDoctor {
 				BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
 				while((line = br.readLine())!= null) {
 					if(count == 0) {
-						String [] data = line.split(",");
-						Doctor d = new Doctor();
-						if(d.getClass().getDeclaredFields().length == data.length)
-						{	
-							count++;
-							continue;
-						}
-						else
-						{
-							System.out.println("Number of fields not same!");
-							break;
-						}
+						count++;
+						continue;
 					}
 					else {
 						String [] data = line.split(",");
@@ -76,9 +66,20 @@ public class InsertDBDoctor {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
 			while((line = br.readLine())!= null) {
+				//kiểm tra xem có đủ thuộc tính không
 				if(count == 0) {
-					count++;
-					continue;
+					String [] data = line.split(",");
+					Doctor d = new Doctor();
+					if(d.getClass().getDeclaredFields().length == data.length)
+					{	
+						count++;
+						continue;
+					}
+					else
+					{
+						System.out.println("Number of fields not same!");
+						break;
+					}
 				}
 				else {
 					String [] data = line.split(",");
