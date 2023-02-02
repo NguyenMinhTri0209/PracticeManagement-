@@ -37,13 +37,11 @@ public class DoctorController {
 	}
 	
 	@RequestMapping("/savedatamultithread")
-	@Transactional(rollbackFor = Exception.class)
-	public String savedatamultithread(){
-		System.out.println("Loading...");
+	public String savedatamultithread() throws Exception{
 		dbDoctorMultiThreads.readDoctorData();
-		CompletableFuture<String> doctor1 = dbDoctorMultiThreads.saveDoctor();
-		CompletableFuture<String> doctor2 = dbDoctorMultiThreads.saveDoctor1();
-		CompletableFuture<String> doctor3 = dbDoctorMultiThreads.saveDoctor2();
+		CompletableFuture<String> doctor1 = dbDoctorMultiThreads.saveDoctor(0,dbDoctorMultiThreads.getLm1());;
+		CompletableFuture<String> doctor2 = dbDoctorMultiThreads.saveDoctor(dbDoctorMultiThreads.getLm1(),dbDoctorMultiThreads.getLm2());
+		CompletableFuture<String> doctor3 = dbDoctorMultiThreads.saveDoctor(dbDoctorMultiThreads.getLm2(),dbDoctorMultiThreads.getLm3());
 		CompletableFuture.allOf(doctor1,doctor2,doctor3).join();
 		return "Done";
 	}
