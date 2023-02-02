@@ -47,7 +47,6 @@ public class InsertDBDoctor {
 						d.setBirthday(new SimpleDateFormat("dd-MM-yyyy").parse(data[6].replaceAll("\"","")));
 						doctorService.save(d);
 					}
-					count++;
 				}
 				
 			} catch (Exception e) {
