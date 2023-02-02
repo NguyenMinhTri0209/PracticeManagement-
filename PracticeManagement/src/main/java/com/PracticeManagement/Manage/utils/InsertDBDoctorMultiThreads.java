@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletableFuture; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,14 +28,27 @@ public class InsertDBDoctorMultiThreads {
 	List<Doctor> doctorList = new ArrayList<>();
 	
 	//chia file thành 3 đoạn
-	int lm1, lm2;
+	int lm1, lm2, lm3;
+	
+	String path = "C:\\Users\\Minht\\Downloads\\bs.csv";
+	
+	//get
+	public int getLm1() {
+		return lm1;
+	}
+	public int getLm2() {
+		return lm2;
+	}
+	public int getLm3() {
+		return lm3;
+	}
 	
 	//insert file darabase.csv vào csdl
 	public void readDoctorData() {
 		int count = 0;
-		if(checkBD() == true) {
+		if(checkBD(path) == true) {
 			try {
-				BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
+				BufferedReader br = new BufferedReader(new FileReader(path));
 				while((line = br.readLine())!= null) {
 					if(count == 0) {
 						count++;
@@ -67,15 +80,16 @@ public class InsertDBDoctorMultiThreads {
 		// chia file ra làm 3
 		lm1 = (int)(doctorList.size()/3);
 		lm2 = (int)(doctorList.size()/3)*2;
+		lm3 = doctorList.size(); // loi
 		
 	}
 	
 	// kiểm tra database có phù hợp để insert vào database không
-	boolean checkBD() {
+	boolean checkBD(String path) {
 		int count = 0;
 		List<Doctor> doctors = jdbcTemplate.query("select iddoctor from doctor", new BeanPropertyRowMapper<Doctor>(Doctor.class));
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
+			BufferedReader br = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!= null) {
 				//kiểm tra xem có đủ thuộc tính không
 				if(count == 0) {
@@ -112,29 +126,13 @@ public class InsertDBDoctorMultiThreads {
 		}
 		return true;
 	}
-	
+		
+	//Asynchronous
 	@Async
-	public CompletableFuture<String> saveDoctor() {
-		for(int i = 0; i < lm1; i++) {
-			doctorService.save(doctorList.get(i));
-		}
-		return null;
-	}
-	
-	@Async
-	public CompletableFuture<String> saveDoctor1() {
+	public CompletableFuture<String> saveDoctor(int lm1, int lm2){
 		for(int i = lm1; i < lm2; i++) {
 			doctorService.save(doctorList.get(i));
 		}
 		return null;
 	}
-	
-	@Async
-	public CompletableFuture<String> saveDoctor2() {
-		for(int i = lm2; i <doctorList.size()-1 ; i++) {
-			doctorService.save(doctorList.get(i));
-		}
-		return null;
-	}
-	
 }
