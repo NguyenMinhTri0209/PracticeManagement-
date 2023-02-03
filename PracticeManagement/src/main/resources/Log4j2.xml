@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %-50c{1.} - %msg%n" />
+                <!--  
+                	% d cho ngày và giờ
+                	% t cho tên luồng
+                	% level cho cấp độ nhật ký
+                	% c cho tên logger (thường là tên gói và tên lớp)
+                	% msg cho thông báo nhật ký 
+                	% n cho dấu phân cách dòng
+                -->
+        </Console>
+ 
+        <File name="File" fileName="MyApp.log">
+            <PatternLayout
+                pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %-50c{1.} - %msg%n" />
+        </File>
+    </Appenders>
+ 
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+</Configuration>

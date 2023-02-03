@@ -3,8 +3,9 @@ package com.PracticeManagement.Manage.controller;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import com.PracticeManagement.Manage.utils.InsertDBDoctorMultiThreads;
 
 @RestController
 public class DoctorController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
 	
 	@Autowired
 	private DoctorService doctorService;
@@ -48,6 +51,7 @@ public class DoctorController {
 	
 	@GetMapping("/doctors")
 	public List<Doctor> getDoctor(){
+		LOGGER.info("Đọc dữ liệu bác sĩ");
 		return doctorService.getAll();
 	}
 	
