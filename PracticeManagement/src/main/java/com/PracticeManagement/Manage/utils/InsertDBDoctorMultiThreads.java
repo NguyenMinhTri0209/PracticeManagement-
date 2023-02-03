@@ -5,14 +5,17 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture; 
+import java.util.concurrent.CompletableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.PracticeManagement.Manage.controller.DoctorController;
 import com.PracticeManagement.Manage.model.Doctor;
 import com.PracticeManagement.Manage.service.DoctorService;
 
@@ -44,7 +47,7 @@ public class InsertDBDoctorMultiThreads {
 	}
 	
 	//insert file darabase.csv vào csdl
-	public void readDoctorData() {
+	public void readDoctorData() {		
 		int count = 0;
 		if(checkBD(path) == true) {
 			try {

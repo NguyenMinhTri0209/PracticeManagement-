@@ -5,11 +5,14 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.PracticeManagement.Manage.controller.DoctorController;
 import com.PracticeManagement.Manage.model.Doctor;
 import com.PracticeManagement.Manage.service.DoctorService;
 
@@ -24,12 +27,19 @@ public class InsertDBDoctor {
 	
 	String line = "";
 	
+	String path = "C:\\Users\\Minht\\Downloads\\bs.csv";
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
+	
 	//insert file darabase.csv vào csdl
 	public void saveDoctorData() {
+		LOGGER.info("Đang đọc dữ liệu từ file .csv");
 		int count = 0;
+		LOGGER.info("Kiểm tra dữ liệu có phù hợp không.");
 		if(checkBD() == true) {
+			LOGGER.info("Dữ liệu hợp lệ.");
 			try {
-				BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
+				BufferedReader br = new BufferedReader(new FileReader(path));
 				while((line = br.readLine())!= null) {
 					if(count == 0) {
 						count++;
@@ -48,12 +58,13 @@ public class InsertDBDoctor {
 						doctorService.save(d);
 					}
 				}
-				
+				LOGGER.info("Dữ liệu đã được lưu.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		else {
+			LOGGER.error("Dữ liệu chưa hợp lệ để lưu");
 			System.out.println("There are a few element is null in database or id doctor is exits. Check again id doctor or id faculty!");
 		}
 	}
@@ -63,7 +74,7 @@ public class InsertDBDoctor {
 		int count = 0;
 		List<Doctor> doctors = jdbcTemplate.query("select iddoctor from doctor", new BeanPropertyRowMapper<Doctor>(Doctor.class));
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Minht\\Downloads\\bs.csv"));
+			BufferedReader br = new BufferedReader(new FileReader(path));
 			while((line = br.readLine())!= null) {
 				//kiểm tra xem có đủ thuộc tính không
 				if(count == 0) {
