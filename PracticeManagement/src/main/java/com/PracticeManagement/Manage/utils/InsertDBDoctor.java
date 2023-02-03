@@ -32,7 +32,7 @@ public class InsertDBDoctor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
 	
 	//insert file darabase.csv vào csdl
-	public void saveDoctorData() {
+	public void saveDoctorData() throws Exception {
 		LOGGER.info("Đang đọc dữ liệu từ file .csv");
 		int count = 0;
 		LOGGER.info("Kiểm tra dữ liệu có phù hợp không.");
@@ -65,7 +65,7 @@ public class InsertDBDoctor {
 		}
 		else {
 			LOGGER.error("Dữ liệu chưa hợp lệ để lưu");
-			System.out.println("There are a few element is null in database or id doctor is exits. Check again id doctor or id faculty!");
+			throw new Exception("There are a few element is null in database or id doctor is exits. Check again id doctor or id faculty!");
 		}
 	}
 	
