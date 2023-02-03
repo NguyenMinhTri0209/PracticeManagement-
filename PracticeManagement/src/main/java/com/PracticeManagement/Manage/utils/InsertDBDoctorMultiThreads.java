@@ -29,25 +29,28 @@ public class InsertDBDoctorMultiThreads {
 	
 	String line = "";
 	List<Doctor> doctorList = new ArrayList<>();
+	List<Doctor> doctorList1 = new ArrayList<>();
+	List<Doctor> doctorList2 = new ArrayList<>();
+	List<Doctor> doctorList3 = new ArrayList<>();
 	
 	//chia file thành 3 đoạn
-	int lm1, lm2, lm3;
+	int lm1, lm2;
 	
 	String path = "C:\\Users\\Minht\\Downloads\\bs.csv";
 	
 	//get
-	public int getLm1() {
-		return lm1;
+	public List<Doctor> getDoctorList1() {
+		return doctorList1;
 	}
-	public int getLm2() {
-		return lm2;
+	public List<Doctor> getDoctorList2() {
+		return doctorList2;
 	}
-	public int getLm3() {
-		return lm3;
+	public List<Doctor> getDoctorList3() {
+		return doctorList3;
 	}
 	
 	//insert file darabase.csv vào csdl
-	public void readDoctorData() {		
+	public void readDoctorData() throws Exception {		
 		int count = 0;
 		if(checkBD(path) == true) {
 			try {
@@ -78,13 +81,16 @@ public class InsertDBDoctorMultiThreads {
 		}
 		else {
 			System.out.println("There are a few element is null in database or id doctor is exits. Check again id doctor or id faculty!");
+			throw new Exception("There are a few element is null in database or id doctor is exits. Check again id doctor or id faculty!");
 		}
 		
 		// chia file ra làm 3
 		lm1 = (int)(doctorList.size()/3);
 		lm2 = (int)(doctorList.size()/3)*2;
-		lm3 = doctorList.size(); // loi
 		
+		doctorList1 = doctorList.subList(0, lm1);
+		doctorList2 = doctorList.subList(lm1, lm2);
+		doctorList3 = doctorList.subList(lm2, doctorList.size());
 	}
 	
 	// kiểm tra database có phù hợp để insert vào database không
@@ -114,11 +120,13 @@ public class InsertDBDoctorMultiThreads {
 					Doctor d = new Doctor();
 					d.setIddoctor(data[0].replaceAll("\"",""));
 					d.setIdfaculty(data[1].replaceAll("\"",""));
+					
 					//Kiểm tra xem iddoctor đã tồn tại hay chưa
 					for(Doctor item:doctors) {
 						if(item.getIddoctor().equals(d.getIddoctor()) == true)
 							return false;
 					}
+					
 					//Kiểm tra xem iddoctor và idfactory có null không
 					if(d.getIddoctor().isEmpty() || d.getIdfaculty().isEmpty())
 						return false;
@@ -132,9 +140,9 @@ public class InsertDBDoctorMultiThreads {
 		
 	//Asynchronous
 	@Async
-	public CompletableFuture<String> saveDoctor(int lm1, int lm2){
-		for(int i = lm1; i < lm2; i++) {
-			doctorService.save(doctorList.get(i));
+	public CompletableFuture<String> saveDoctor(List<Doctor> doctorList){
+		for(Doctor item:doctorList) {
+			doctorService.save(item);
 		}
 		return null;
 	}
