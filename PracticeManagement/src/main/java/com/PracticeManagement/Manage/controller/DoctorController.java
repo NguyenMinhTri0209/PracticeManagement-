@@ -33,7 +33,7 @@ public class DoctorController {
 	
 	@Autowired
 	private InsertDBDoctorMultiThreads dbDoctorMultiThreads; 
-	
+		
 	@RequestMapping("/savedata")
 	public void savedata() throws Exception{
 		dbDoctor.saveDoctorData();
@@ -45,7 +45,7 @@ public class DoctorController {
 		CompletableFuture<String> doctor1 = dbDoctorMultiThreads.saveDoctor(dbDoctorMultiThreads.getDoctorList1());
 		CompletableFuture<String> doctor2 = dbDoctorMultiThreads.saveDoctor(dbDoctorMultiThreads.getDoctorList2());
 		CompletableFuture<String> doctor3 = dbDoctorMultiThreads.saveDoctor(dbDoctorMultiThreads.getDoctorList3());
-//		CompletableFuture.allOf(doctor1,doctor2,doctor3).join();
+		CompletableFuture.allOf(doctor1,doctor2,doctor3).join();
 		return "Done";
 	}
 	

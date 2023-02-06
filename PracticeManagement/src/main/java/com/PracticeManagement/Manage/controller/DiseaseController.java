@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.PracticeManagement.Manage.model.Disease;
+import com.PracticeManagement.Manage.model.Doctor;
 import com.PracticeManagement.Manage.service.DiseaseService;
 
 @RestController
