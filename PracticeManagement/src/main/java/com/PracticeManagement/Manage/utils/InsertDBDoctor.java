@@ -31,7 +31,10 @@ public class InsertDBDoctor {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
 	
-	//insert file darabase.csv vào csdl
+	/**
+	 * Đây là phương thức lưu thông tin bác sĩ từ file .csv vào database
+	 * @throws Exception khi dữ liệu lưu không thành công
+	 */
 	public void saveDoctorData() throws Exception {
 		LOGGER.info("Đang đọc dữ liệu từ file .csv");
 		int count = 0;
@@ -69,7 +72,10 @@ public class InsertDBDoctor {
 		}
 	}
 	
-	// kiểm tra database có phù hợp để insert vào database không
+	/**
+	 * Kiểm tra file.csv có phù hợp để insert vào database không
+	 * @return boolean trả về true/false khi kiểm tra file.csv có phù hợp để lưu và database không
+	 */
 	boolean checkBD() {
 		int count = 0;
 		List<Doctor> doctors = jdbcTemplate.query("select iddoctor from doctor", new BeanPropertyRowMapper<Doctor>(Doctor.class));

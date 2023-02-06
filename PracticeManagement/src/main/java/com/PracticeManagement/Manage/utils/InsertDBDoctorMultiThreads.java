@@ -50,6 +50,10 @@ public class InsertDBDoctorMultiThreads {
 	}
 	
 	//insert file darabase.csv vào csdl
+	/**
+	 * Đây là phương thức đọc thông tin bác sĩ từ file.csv, lưu chúng list và chia thành 3 list nhỏ.
+	 * @throws Exception khi dữ liệu lưu không thành công
+	 */
 	public void readDoctorData() throws Exception {		
 		int count = 0;
 		if(checkBD(path) == true) {
@@ -93,7 +97,10 @@ public class InsertDBDoctorMultiThreads {
 		doctorList3 = doctorList.subList(lm2, doctorList.size());
 	}
 	
-	// kiểm tra database có phù hợp để insert vào database không
+	/**
+	 * Kiểm tra file.csv có phù hợp để insert vào database không
+	 * @return boolean trả về true/false khi kiểm tra file.csv có phù hợp để lưu và database không
+	 */
 	boolean checkBD(String path) {
 		int count = 0;
 		List<Doctor> doctors = jdbcTemplate.query("select iddoctor from doctor", new BeanPropertyRowMapper<Doctor>(Doctor.class));
@@ -139,6 +146,11 @@ public class InsertDBDoctorMultiThreads {
 	}
 		
 	//Asynchronous
+	/**
+	 * Lập trình đa tiến trình không đồng bộ dùng lưu dữ liệu vào database
+	 * @param doctorList danh sách các đối tượng doctor cần được lưu
+	 * @return null
+	 */
 	@Async
 	public CompletableFuture<String> saveDoctor(List<Doctor> doctorList){
 		for(Doctor item:doctorList) {
