@@ -1,11 +1,15 @@
 package com.PracticeManagement.Manage.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.PracticeManagement.Manage.model.Doctor;
@@ -60,9 +65,16 @@ public class DoctorController {
 		return doctorService.getById(id);
 	}
 	
-	@PostMapping("/doctors")
-	public String saveDoctor(@RequestBody Doctor doctor) {
-		return doctorService.save(doctor) + " object is save.";
+	@RequestMapping(value="/doctors", method=RequestMethod.POST)
+	public HttpEntity<Doctor> saveDoctor(@RequestBody Doctor doctor) {
+//		return doctorService.save(doctor) + " object is save.";
+		try {
+	        Doctor Doctor = doctorService.save(doctor);
+	        return ResponseEntity.created(new URI("/doctors" + Doctor.getIddoctor()))
+	                .body(doctor);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	    }
 	}
 	
 	@PutMapping("/doctors/{id}")

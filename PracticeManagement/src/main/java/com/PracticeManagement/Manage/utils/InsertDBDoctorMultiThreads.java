@@ -93,8 +93,8 @@ public class InsertDBDoctorMultiThreads {
 		lm2 = (int)(doctorList.size()/3)*2;
 		
 		doctorList1 = doctorList.subList(0, lm1);
-		doctorList2 = doctorList.subList(lm1, lm2);
-		doctorList3 = doctorList.subList(lm2, doctorList.size());
+		doctorList2 = doctorList.subList(lm1+1, lm2);
+		doctorList3 = doctorList.subList(lm2+1, doctorList.size());
 	}
 	
 	/**
@@ -145,7 +145,6 @@ public class InsertDBDoctorMultiThreads {
 		return true;
 	}
 		
-	//Asynchronous
 	/**
 	 * Lập trình đa tiến trình không đồng bộ dùng lưu dữ liệu vào database
 	 * @param doctorList danh sách các đối tượng doctor cần được lưu

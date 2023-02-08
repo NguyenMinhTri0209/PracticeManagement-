@@ -17,7 +17,7 @@ public interface DoctorService {
 	 * @param doctor Đây là đối tượng doctor cần lưu
 	 * @return Lưu đối tượng doctor vào database
 	 */
-	int save(Doctor doctor);
+	Doctor save(Doctor doctor);
 	
 	/**
 	 * Đây là phương thức cập nhật lại một đối tượng doctor trong database

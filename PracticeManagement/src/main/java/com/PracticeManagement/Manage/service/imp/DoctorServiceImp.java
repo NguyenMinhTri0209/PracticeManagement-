@@ -30,7 +30,7 @@ public class DoctorServiceImp implements DoctorService{
 	 * @return int Trả về 1 hoặc 0 khi đối tượng doctor được lưu thành công hoặc không thành công
 	 */
 	@Override
-	public int save(Doctor doctor) {
+	public Doctor save(Doctor doctor) {
 		
 //		Tự sinh id bác sĩ
 		
@@ -49,8 +49,9 @@ public class DoctorServiceImp implements DoctorService{
 //		else
 //			iddoctor = "BS" + index;
 //		return jdbcTemplate.update("insert into doctor values(?,?,?,?,?,?,?)", new Object[] {iddoctor, doctor.getIdfaculty(), doctor.getName(), doctor.getAddress(), doctor.getPhone(), doctor.isSex(), doctor.getBirthday()});
-
-		return jdbcTemplate.update("insert into doctor values(?,?,?,?,?,?,?)", new Object[] {doctor.getIddoctor(), doctor.getIdfaculty(), doctor.getName(), doctor.getAddress(), doctor.getPhone(), doctor.isSex(), doctor.getBirthday()});
+		jdbcTemplate.update("insert into doctor values(?,?,?,?,?,?,?)", new Object[] {doctor.getIddoctor(), doctor.getIdfaculty(), doctor.getName(), doctor.getAddress(), doctor.getPhone(), doctor.isSex(), doctor.getBirthday()});
+		Doctor Doctor = getById(doctor.getIddoctor());
+		return Doctor;
 
 	}
 

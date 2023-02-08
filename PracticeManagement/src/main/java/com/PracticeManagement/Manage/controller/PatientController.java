@@ -18,8 +18,6 @@ import com.PracticeManagement.Manage.service.PatientService;
 @Controller
 public class PatientController {
 
-
-	
 	@Autowired
 	private PatientService patientService;
 	
